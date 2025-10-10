@@ -9,7 +9,6 @@ const content = document.getElementById('content');
 
 const tabs = document.getElementsByTagName('button');
 
-
 function changeTabs(event) {
     content.innerHTML = '';
     switch(event.currentTarget.getAttribute("id")) {
