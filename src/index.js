@@ -1,32 +1,58 @@
 // src/index.js
 import "./styles.css";
-
-import { firstLoad } from "./main.js";
-import { loadMenu } from "./menu.js";
-import { loadAbout } from "./about.js";
+import { Task, Project } from "./task.js";
 
 const content = document.getElementById('content');
-
+const newProjectButton = document.getElementById('addProject');
+const newTaskButton = document.getElementById('addTask');
+const projectNav = document.getElementById('projectTabs');
 const tabs = document.getElementsByTagName('button');
 
-function changeTabs(event) {
+
+const projectMap = {};
+
+const allProject = new Project("All");
+projectMap.All = allProject;
+const allProjectElement = createProjectTab("All");
+projectNav.appendChild(allProjectElement);
+allProjectElement.addEventListener("click", loadTab)
+
+
+function createProjectTab(name) {
+    const projectButton = document.createElement("button");
+    projectButton.id = name;
+    projectButton.innerHTML = name; 
+    return projectButton; 
+}
+
+function loadProject(id) {
     content.innerHTML = '';
-    switch(event.currentTarget.getAttribute("id")) {
-        case 'home':
-            firstLoad(content);
-            break;
-        case 'menu':
-            loadMenu(content);
-            break;
-        case 'about':
-            loadAbout(content);
-            break;
+    for(const task of projectMap[id].taskList) {
+        const newTask = document.createElement("p");
+        newTask.innerHTML = `<div><h3>${task.title}</h3><p>${task.description} ${task.dueDate} ${task.priority}</p></div>`;
+        content.appendChild(newTask);
     }
 }
 
-for (const tab of tabs) {
-    console.log(tab);
-    tab.addEventListener("click", changeTabs);
+function loadTab(event) {
+    loadProject(event.target.id);
 }
 
-firstLoad(content);
+
+newProjectButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    const newName = projectName.value;
+    const newProject = new Project(newName);
+    projectMap.newName = newProject;
+
+    projectNav.appendChild(createProjectTab(newName));
+    // Add event listener
+});
+
+newTaskButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    const newTask = new Task(taskTitle.value, taskDesc.value, taskDate.value, priority.value);
+    
+    projectMap[taskProject.value].taskList.push(newTask);
+    loadProject(taskProject.value);
+});
