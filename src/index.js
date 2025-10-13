@@ -26,13 +26,25 @@ function createProjectTab(name) {
 }
 
 function loadProject(id) {
+    // Reloads given project
     content.innerHTML = '';
     let i = 0;
     for(const task of projectMap[id].taskList) {
         const newTask = document.createElement("div");
         newTask.id = i;
-        newTask.innerHTML = `<h3>${task.title}</h3><p>${task.dueDate} ${task.priority}</p>`;
+        newTask.innerHTML = `<h3>${task.title}</h3><p style="display:none">${task.description}</p><p>${task.dueDate} ${task.priority}</p>`;
+        
+        // Expands task to reveal description
+        newTask.addEventListener("click", (event) => {
+            if (newTask.childNodes[1].style.display === "none") {
+                newTask.childNodes[1].style.display = "block";
+            } else {
+                newTask.childNodes[1].style.display = "none";
+            }
+            
+        });
 
+        // Deletes entire task
         const deleteButton = document.createElement("button");
         deleteButton.innerHTML = "X";
         deleteButton.addEventListener("click", (event) => {
@@ -56,10 +68,20 @@ newProjectButton.addEventListener("click", (event) => {
     event.preventDefault();
     const newName = projectName.value;
     const newProject = new Project(newName);
-    projectMap.newName = newProject;
+    projectMap[newName] = newProject;
 
-    projectNav.appendChild(createProjectTab(newName));
-    // Add event listener
+    // Create new projects
+    const newProjectTab = createProjectTab(newName);
+    projectNav.appendChild(newProjectTab);
+    newProjectTab.addEventListener("click", loadTab);
+
+    // Update forms
+    const taskForm = document.getElementById("taskProject");
+    const taskOption = document.createElement("option");
+    taskOption.value = newName;
+    taskOption.innerHTML = newName;
+    taskForm.appendChild(taskOption);
+
 });
 
 newTaskButton.addEventListener("click", (event) => {
