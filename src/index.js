@@ -27,10 +27,23 @@ function createProjectTab(name) {
 
 function loadProject(id) {
     content.innerHTML = '';
+    let i = 0;
     for(const task of projectMap[id].taskList) {
-        const newTask = document.createElement("p");
-        newTask.innerHTML = `<div><h3>${task.title}</h3><p>${task.description} ${task.dueDate} ${task.priority}</p></div>`;
+        const newTask = document.createElement("div");
+        newTask.id = i;
+        newTask.innerHTML = `<h3>${task.title}</h3><p>${task.dueDate} ${task.priority}</p>`;
+
+        const deleteButton = document.createElement("button");
+        deleteButton.innerHTML = "X";
+        deleteButton.addEventListener("click", (event) => {
+            let removeID = event.target.parentElement.id;
+            event.target.parentElement.remove();
+            projectMap[id].taskList.splice(removeID, 1);
+            loadProject(id);
+        });
+        newTask.appendChild(deleteButton);
         content.appendChild(newTask);
+        i++;
     }
 }
 
