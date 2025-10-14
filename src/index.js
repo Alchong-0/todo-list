@@ -33,14 +33,18 @@ function loadProject(id) {
         const newTask = document.createElement("div");
         newTask.id = i;
         newTask.className = "task";
-        newTask.innerHTML = `<h3>${task.title}</h3><p style="display:none">${task.description}</p><p>${task.dueDate} ${task.priority}</p>`;
+        newTask.innerHTML = `<h3>${task.title}</h3>
+                             <p class="desc" style="display:none">${task.description}</p>
+                             <p>${task.dueDate} ${task.priority}</p>`;
         
         // Expands task to reveal description
-        newTask.addEventListener("click", (event) => {
-            if (newTask.childNodes[1].style.display === "none") {
-                newTask.childNodes[1].style.display = "block";
-            } else {
-                newTask.childNodes[1].style.display = "none";
+        newTask.addEventListener("click", () => {
+            if (newTask.childNodes[1].style) {
+                if (newTask.childNodes[1].style.display === "none") {
+                    newTask.childNodes[1].style.display = "block";
+                } else {
+                    newTask.childNodes[1].style.display = "none";
+                }
             }
         });
 

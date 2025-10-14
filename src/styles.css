@@ -46,3 +46,12 @@ nav button.active {
 .task p {
     margin-right: 10px;
 }
+
+.task .desc {
+    color: gray;
+}
+
+.task button {
+    padding: 0px 10px;
+    font-size: 20px;
+}
