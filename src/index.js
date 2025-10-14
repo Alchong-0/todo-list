@@ -32,6 +32,7 @@ function loadProject(id) {
     for(const task of projectMap[id].taskList) {
         const newTask = document.createElement("div");
         newTask.id = i;
+        newTask.className = "task";
         newTask.innerHTML = `<h3>${task.title}</h3><p style="display:none">${task.description}</p><p>${task.dueDate} ${task.priority}</p>`;
         
         // Expands task to reveal description
@@ -41,7 +42,6 @@ function loadProject(id) {
             } else {
                 newTask.childNodes[1].style.display = "none";
             }
-            
         });
 
         // Deletes entire task

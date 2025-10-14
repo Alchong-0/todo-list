@@ -1,26 +1,48 @@
 /* styles.css */
-#lemonade {
-    width: 700px;
-    height: 450px;
+#content {
+    border: solid 1px #ccc;
+    height: 100%;
+    width: 100%;
+    position: relative;
 }
 
-.menu-item {
-    width: 500px;
-    height: 500px;
-    margin: 20px;
+nav {
+    border: solid 1px #ccc;
+    background-color: #f1f1f1;
+    margin-top: 10px;
+    width: 100%;
 }
 
-#menu-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-
-button {
-    border: solid 1px black;
-    border-radius: 5px;
+nav button {
+    background-color: inherit;
     font-size: 20px;
-    background-color: white;
     padding: 10px;
-    margin-right: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    border: none;
+    outline: none;
+}
+
+nav button:hover {
+    background-color: #ddd;
+}
+
+nav button.active {
+    background-color: #ccc;
+}
+
+.task {
+    border: solid 1px black;
+    display: flex;
+    padding: 10px;
+    justify-content: flex-end;
+    margin: 2px;
+}
+
+.task h3 {
+    margin-right: auto;
+}
+
+.task p {
+    margin-right: 10px;
 }
