@@ -61,12 +61,20 @@ function loadProject(id) {
 
 function loadTab(event) {
     loadProject(event.target.id);
+    for (const elem of projectNav.childNodes) {
+        elem.className = "";
+    }
+    event.target.className = "active";
+    console.log(event.target);
 }
 
 
 newProjectButton.addEventListener("click", (event) => {
     event.preventDefault();
     const newName = projectName.value;
+    if (projectName.value == "") {
+        return;
+    }
     const newProject = new Project(newName);
     projectMap[newName] = newProject;
 
