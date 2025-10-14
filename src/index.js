@@ -94,6 +94,9 @@ newProjectButton.addEventListener("click", (event) => {
 
 newTaskButton.addEventListener("click", (event) => {
     event.preventDefault();
+    if (taskTitle.value == "" || taskDate == "") {
+        return;
+    }
     const newTask = new Task(taskTitle.value, taskDesc.value, taskDate.value, priority.value);
     
     projectMap[taskProject.value].taskList.push(newTask);
