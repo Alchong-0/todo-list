@@ -65,7 +65,6 @@ function loadTab(event) {
         elem.className = "";
     }
     event.target.className = "active";
-    console.log(event.target);
 }
 
 
@@ -94,7 +93,7 @@ newProjectButton.addEventListener("click", (event) => {
 
 newTaskButton.addEventListener("click", (event) => {
     event.preventDefault();
-    if (taskTitle.value == "" || taskDate == "") {
+    if (taskTitle.value == "" || taskDate.value == "") {
         return;
     }
     const newTask = new Task(taskTitle.value, taskDesc.value, taskDate.value, priority.value);
