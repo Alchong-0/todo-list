@@ -35,20 +35,26 @@ nav button.active {
     border: solid 1px black;
     display: flex;
     padding: 10px;
-    justify-content: flex-end;
     margin: 2px;
+
+    align-items: center;
 }
 
-.task h3 {
-    margin-right: auto;
+.task .title {
+    font-size: 25px;
+    font-weight: bold;
 }
 
-.task p {
+.task .date {
     margin-right: 10px;
+    margin-left: auto;
 }
 
 .task .desc {
     color: gray;
+    margin-right: auto;
+    margin-left: 15px;
+    font-style: italic;
 }
 
 .task button {
