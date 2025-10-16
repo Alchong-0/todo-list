@@ -1,6 +1,7 @@
 // src/index.js
 import "./styles.css";
 import { Task, Project } from "./task.js";
+import { format } from "date-fns";
 
 const content = document.getElementById('content');
 const newProjectButton = document.getElementById('addProject');
@@ -14,8 +15,10 @@ const projectMap = {};
 const allProject = new Project("All");
 projectMap.All = allProject;
 const allProjectElement = createProjectTab("All");
+allProjectElement.className = "active";
 projectNav.appendChild(allProjectElement);
-allProjectElement.addEventListener("click", loadTab)
+allProjectElement.addEventListener("click", loadTab);
+
 
 
 function createProjectTab(name) {
@@ -33,12 +36,18 @@ function loadProject(id) {
         const newTask = document.createElement("div");
         newTask.id = i;
         newTask.className = "task";
-        newTask.innerHTML = `<p class="title">${task.title}</p>
+        let dueDate = format(new Date(task.dueDate.split("-")), 'PPPP');
+        newTask.innerHTML = `<div id="${task.priority}" class="priorityMark"> </div>
+                             <p class="title">${task.title}</p>
                              <p class="desc" style="display:none">${task.description}</p>
-                             <p class="date">${task.dueDate} ${task.priority}</p>`;
+                             <p class="date">Due: ${dueDate}</p>
+                             <p class="priority">Priority: ${task.priority}</p>`;
         
         // Expands task to reveal description
         newTask.addEventListener("click", (event) => {
+            if (event.target.tagName == "BUTTON") {
+                return;
+            }
             const descElement = event.target.getElementsByClassName("desc")[0];
             if (descElement.style.display === "none") {
                 descElement.style.display = "block";
@@ -62,12 +71,16 @@ function loadProject(id) {
     }
 }
 
-function loadTab(event) {
-    loadProject(event.target.id);
+function updateActive(projectElement) {
     for (const elem of projectNav.childNodes) {
         elem.className = "";
     }
-    event.target.className = "active";
+    projectElement.className = "active";
+}
+
+function loadTab(event) {
+    loadProject(event.target.id);
+    updateActive(event.target);
 }
 
 
@@ -103,4 +116,5 @@ newTaskButton.addEventListener("click", (event) => {
     
     projectMap[taskProject.value].taskList.push(newTask);
     loadProject(taskProject.value);
+    updateActive(document.getElementById(taskProject.value));
 });
