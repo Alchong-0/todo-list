@@ -7,7 +7,6 @@ const content = document.getElementById('content');
 const newProjectButton = document.getElementById('addProject');
 const newTaskButton = document.getElementById('addTask');
 const projectNav = document.getElementById('projectTabs');
-const tabs = document.getElementsByTagName('button');
 
 
 const projectMap = {};
@@ -19,7 +18,36 @@ allProjectElement.className = "active";
 projectNav.appendChild(allProjectElement);
 allProjectElement.addEventListener("click", loadTab);
 
+let storedProjects = JSON.parse(localStorage.getItem("projects")) || [];
+for (const projectName of Object.keys(storedProjects)) {
+    const project = storedProjects[projectName];
+    let storedProject = new Project(project.name);
+    for (const task of project["_taskList"]) {
+        let newTask = new Task(task["_title"], task["_description"], task["_dueDate"], task["_priority"]);
+        storedProject.taskList.push(newTask);
+    }
+    projectMap[projectName] = storedProject;
+}
+loadTabs();
+loadProject("All");
 
+function loadTabs() {
+    for (const tab of Object.keys(projectMap)) {
+        if (tab !== "All") {
+            // Create new project tabs
+            const newProjectTab = createProjectTab(tab);
+            projectNav.appendChild(newProjectTab);
+            newProjectTab.addEventListener("click", loadTab);
+
+            // Update forms
+            const taskForm = document.getElementById("taskProject");
+            const taskOption = document.createElement("option");
+            taskOption.value = tab;
+            taskOption.innerHTML = tab;
+            taskForm.appendChild(taskOption);
+        }
+    }
+}
 
 function createProjectTab(name) {
     const projectButton = document.createElement("button");
@@ -83,11 +111,14 @@ function loadTab(event) {
     updateActive(event.target);
 }
 
+function saveProjects() {
+    localStorage.setItem("projects", JSON.stringify(projectMap));
+}
 
 newProjectButton.addEventListener("click", (event) => {
     event.preventDefault();
     const newName = projectName.value;
-    if (projectName.value == "") {
+    if (projectName.value == "" || Object.keys(projectMap).includes(projectName.value)) {
         return;
     }
     const newProject = new Project(newName);
@@ -105,6 +136,7 @@ newProjectButton.addEventListener("click", (event) => {
     taskOption.innerHTML = newName;
     taskForm.appendChild(taskOption);
 
+    saveProjects();
 });
 
 newTaskButton.addEventListener("click", (event) => {
@@ -117,4 +149,6 @@ newTaskButton.addEventListener("click", (event) => {
     projectMap[taskProject.value].taskList.push(newTask);
     loadProject(taskProject.value);
     updateActive(document.getElementById(taskProject.value));
+
+    saveProjects();
 });
