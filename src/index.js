@@ -4,9 +4,17 @@ import { Task, Project } from "./task.js";
 import { format } from "date-fns";
 
 const content = document.getElementById('content');
-const newProjectButton = document.getElementById('addProject');
-const newTaskButton = document.getElementById('addTask');
+const addNewProjectBtn = document.getElementById('addProject');
+const addTaskButton = document.getElementById('addTask');
 const projectNav = document.getElementById('projectTabs');
+
+const newProjectBtn = document.getElementById('newProjectBtn');
+const projectModal = document.getElementById('projectModal');
+const projectClose = document.getElementById('projectClose');
+
+const newTaskBtn = document.getElementById('newTaskBtn');
+const taskModal = document.getElementById('taskModal');
+const taskClose = document.getElementById('taskClose');
 
 
 const projectMap = {};
@@ -30,6 +38,34 @@ for (const projectName of Object.keys(storedProjects)) {
 }
 loadTabs();
 loadProject("All");
+
+newProjectBtn.onclick = function() {
+    projectModal.style.display = "block";
+}
+
+projectClose.onclick = function() {
+    projectModal.style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target == projectModal) {
+        projectModal.style.display = "none";
+    }
+}
+
+newTaskBtn.onclick = function() {
+    taskModal.style.display = "block";
+}
+
+taskClose.onclick = function() {
+    taskModal.style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target == taskModal) {
+        taskModal.style.display = "none";
+    }
+}
 
 function loadTabs() {
     for (const tab of Object.keys(projectMap)) {
@@ -66,6 +102,7 @@ function loadProject(id) {
         newTask.className = "task";
         let dueDate = format(new Date(task.dueDate.split("-")), 'PPPP');
         newTask.innerHTML = `<div id="${task.priority}" class="priorityMark"> </div>
+                             <input class="checkbox" type="checkbox">
                              <p class="title">${task.title}</p>
                              <p class="desc" style="display:none">${task.description}</p>
                              <p class="date">Due: ${dueDate}</p>
@@ -115,7 +152,7 @@ function saveProjects() {
     localStorage.setItem("projects", JSON.stringify(projectMap));
 }
 
-newProjectButton.addEventListener("click", (event) => {
+addNewProjectBtn.addEventListener("click", (event) => {
     event.preventDefault();
     const newName = projectName.value;
     if (projectName.value == "" || Object.keys(projectMap).includes(projectName.value)) {
@@ -137,9 +174,10 @@ newProjectButton.addEventListener("click", (event) => {
     taskForm.appendChild(taskOption);
 
     saveProjects();
+    projectModal.style.display = "none";
 });
 
-newTaskButton.addEventListener("click", (event) => {
+addTaskButton.addEventListener("click", (event) => {
     event.preventDefault();
     if (taskTitle.value == "" || taskDate.value == "") {
         return;
@@ -151,4 +189,5 @@ newTaskButton.addEventListener("click", (event) => {
     updateActive(document.getElementById(taskProject.value));
 
     saveProjects();
+    taskModal.style.display = "none";
 });
